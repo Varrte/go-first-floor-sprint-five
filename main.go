@@ -206,16 +206,15 @@ func (s Swimming) Calories() float64 {
 func (s Swimming) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
 	//...
-	tmp := s.Training.TrainingInfo()
+
+	tmp := InfoMessage{
+		TrainingType: s.TrainingType,
+		Duration:     s.Duration,
+		Distance:     s.distance(),
+		Speed:        s.meanSpeed(),
+		Calories:     s.Calories(),
+	}
 	return tmp
-	// tmp := InfoMessage{
-	// 	TrainingType: s.TrainingType,
-	// 	Duration:     s.Duration,
-	// 	Distance:     s.distance(),
-	// 	Speed:        s.meanSpeed(),
-	// 	Calories:     s.Calories(),
-	// }
-	// return tmp
 
 }
 
