@@ -196,7 +196,8 @@ func (s Swimming) Calories() float64 {
 	// вставьте ваш код ниже
 	//...
 	speed := s.meanSpeed() + SwimmingCaloriesMeanSpeedShift
-	return speed * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Hours()
+	calories := speed * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Hours()
+	return calories
 
 }
 
@@ -205,7 +206,8 @@ func (s Swimming) Calories() float64 {
 func (s Swimming) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
 	//...
-	return s.Training.TrainingInfo()
+	tmp := s.Training.TrainingInfo()
+	return tmp
 	// tmp := InfoMessage{
 	// 	TrainingType: s.TrainingType,
 	// 	Duration:     s.Duration,
