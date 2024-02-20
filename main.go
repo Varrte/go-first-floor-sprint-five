@@ -14,7 +14,7 @@ const (
 	CmInM      = 100  // количество сантиметров в одном метре
 )
 
-// Training общая структура для всех тренировок OOO
+// Training общая структура для всех тренировок
 type Training struct {
 	TrainingType string        // тип тренировки
 	Action       int           // количество повторов(шаги, гребки при плавании)
@@ -36,6 +36,10 @@ func (t Training) distance() float64 {
 func (t Training) meanSpeed() float64 {
 	// вставьте ваш код ниже
 	//...
+	if t.Duration.Hours() == 0 {
+		return 0
+	}
+
 	return t.distance() / t.Duration.Hours()
 }
 
@@ -60,10 +64,7 @@ type InfoMessage struct {
 // TrainingInfo возвращает труктуру InfoMessage, в которой хранится вся информация о проведенной тренировке.
 func (t Training) TrainingInfo() InfoMessage {
 	// вставьте ваш код ниже
-	//...Чтобы заполнить все поля структуры InfoMessage{},
-	// нужно будет вычислить дистанцию, среднюю скорость и количество калорий.
-	// Для получения этих значений методы уже определены.
-	// WTF?
+	//...
 	tmp := InfoMessage{
 		TrainingType: t.TrainingType,
 		Duration:     t.Duration,
@@ -112,6 +113,9 @@ type Running struct {
 func (r Running) Calories() float64 {
 	// вставьте ваш код ниже
 	//...
+	if r.Duration.Hours() == 0 {
+		return 0
+	}
 	speed := CaloriesMeanSpeedMultiplier*r.meanSpeed() + CaloriesMeanSpeedShift
 	timeInH := r.Duration.Hours() * MinInHours
 	return speed * r.Weight / MInKm * timeInH
@@ -148,9 +152,14 @@ type Walking struct {
 func (w Walking) Calories() float64 {
 	// вставьте ваш код ниже
 	//...
+	if w.Height == 0 {
+		return 0
+	}
 	speedMinsec := math.Pow(w.meanSpeed()*KmHInMsec, 2)
 	timeInmin := w.Duration.Hours() * MinInHours
-	return (CaloriesWeightMultiplier*w.Weight + (speedMinsec/w.Height)*CaloriesSpeedHeightMultiplier*w.Weight) * timeInmin
+	weightMultiplier := CaloriesWeightMultiplier * w.Weight
+	speedHeightMultiplier := CaloriesSpeedHeightMultiplier * w.Weight
+	return (weightMultiplier + (speedMinsec/w.Height)*speedHeightMultiplier) * timeInmin
 }
 
 // TrainingInfo возвращает структуру InfoMessage с информацией о проведенной тренировке.
@@ -184,6 +193,9 @@ type Swimming struct {
 func (s Swimming) meanSpeed() float64 {
 	// вставьте ваш код ниже
 	//...
+	if s.Duration.Hours() == 0 {
+		return 0
+	}
 	speed := float64(s.LengthPool) * float64(s.CountPool) / MInKm / s.Duration.Hours()
 	return speed
 }
